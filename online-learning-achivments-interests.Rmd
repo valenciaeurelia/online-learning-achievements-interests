@@ -1,0 +1,469 @@
+---
+title: "Lembar Jawaban UAS IS240 Praktek Probabilitas dan Statistika"
+author: "Tuliskan nama anda di sini."
+date: "2021-05"
+output:
+  pdf_document: 
+    toc: yes
+    toc_depth: 4
+    number_sections: yes
+    keep_tex: yes
+  html_document: 
+    number_sections: yes
+  word_document: 
+    toc: yes
+    toc_depth: 4
+    highlight: tango
+    keep_md: yes
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+******************************************************   
+Nama     : Valencia Eurelia Angelie Tania          
+Kelas    : IS240-CL      
+NIM      : 00000046227   
+Tanggal  : 2021-03      
+Waktu    :     
+******************************************************   
+
+# Petunjuk Umum
+
+1.	Gunakan template jurnal Infosys dari laman https://ejournals.umn.ac.id/index.php/SI untuk menuliskan laporan individu. Gunakan template markdown (.Rmd) yang telah disediakan untuk script anda.
+2.	File data disimpan dalam format MS Excel .xlsx. File laporan dalam format MS Word .docx. 
+3.	Format nama file: NamaKelompok_Nama_NIM.extension, contoh: A3_KenDedes_0123456.Rmd.
+4.	Semua output harus dihasilkan oleh program R.
+5.	Semua file yang digunakan untuk menuliskan laporan ini dikumpulkan via elearning dengan zip relative path.
+6.	Setiap mahasiswa mengumpulkan sendiri-sendiri sesuai jadwal UAS.
+7.  **Pastikan file Rmd anda dapat dicompile dengan asumsi file data berada pada folder yang sama dengan script; jangan menggunakan absolute file path.** Bila anda menggunakan R package yang bukan merupakan package default R, tuliskan informasi mengenai package yang perlu diinstal. **File yang tidak dapat dicompile secara otomatis mendapatkan nilai 1 dari 100.**
+
+
+# Soal
+
+## (Bobot 10%) Kelengkapan dan Kesesuaian Format
+
+File markdown script, file laporan dengan format jurnal Infosys dan file data dalam format yang telah ditentukan pada petunjuk ujian disubmit via e-learning.
+
+## (Bobot 10%) Impor Data dan Deskripsi Singkat Data
+
+Impor data anda ke dalam R dengan asumsi file data berada pada folder yang sama dengan file script R anda. Tampilkan deskripsi singkat data anda. 
+
+
+*Jawaban*
+
+```{r message=FALSE, warning=FALSE}
+
+#a-----
+#Import data
+library(readxl)
+dataValencia <- read_excel("C4_ValenciaEurelia AngelieTania_00000046227.xlsx")
+
+#b-------
+#Tuliskan perintah R untuk menampilkan deskripsi singkat data anda.
+str(dataValencia)
+head(dataValencia)
+tail(dataValencia)
+```
+
+
+## (Bobot 30%) Eksplorasi data 
+
+### (20%) Grafik 
+
+Gambarkan grafik yang sesuai untuk menggambarkan distribusi frekuensi semua variabel pada data anda. Bahaslah kategori dengan frekuensi tertinggi dan terendah. Apa yang dapat anda simpulkan? Gambarkan grafik sesuai untuk menggambarkan distribusi frekuensi variabel numerik pada data anda. Apakah distribusinya mengikuti distribusi probabilitas tertentu? Tunjukkan outlier (bila ada) pada gambar dan lakukan uji normalitas. Apa yang dapat anda simpulkan? (Bila semua data anda adalah data kategorikal, tuliskan "Tidak ada variabel numerik.")
+
+
+*Jawaban*
+
+```{r message=FALSE, warning=FALSE}
+#Grafik 1
+angkatanMahasiswa<-table(dataValencia$`Mahasiwa angkatan`)
+angkatanMahasiswa
+barplot(angkatanMahasiswa,main="Distribusi Berdasarkan Angkatan",  col=rainbow(8))
+
+#Kesimpulan Grafik 1
+# Berdasarkan bar chart di atas diketahui bahwa, angkatan tahun “2020” memiliki frekuensi yang paling tinggi dengan total 82 responden, sedangkan angkatan tahun “< 2016” memiliki frekuensi paling rendah dengan total 1 responden.
+# Dari bar chart tersebut dapat disimpulkan bahwa subjek penelitian didominasi oleh mahasiswa Angkatan tahun 2020.
+
+#Grafik 2
+jenisKelamin<-table(dataValencia$`Jenis Kelamin`)
+jenisKelamin
+barplot(jenisKelamin,main="Distribusi Berdasarkan Jenis Kelamin", col=rainbow(8))
+
+#Kesimpulan Grafik 2
+# Berdasarkan bar chart di atas diketahui bahwa, jenis kelamin “Perempuan” memiliki frekuensi yang paling tinggi dengan total 116 responden, sedangkan jenis kelamin “Laki-Laki” memiliki frekuensi paling rendah dengan total 51 responden.
+# Dari bar chart tersebut dapat disimpulkan bahwa mayoritas responden penelitian berjenis kelamin perempuan.
+
+#Grafik 3
+rangeIPK<-table(dataValencia$`Berapa range IPK terakhir Anda`)
+rangeIPK
+barplot(rangeIPK,main="Distribusi Berdasarkan Range IPK Mahasiswa", col=rainbow(8))
+
+#Kesimpulan Grafik 3
+# Berdasarkan bar chart di atas diketahui bahwa, range IPK “3.50 - 4.00” memiliki frekuensi yang paling tinggi dengan total 96 responden, sedangkan range IPK “< 2.50” memiliki frekuensi paling rendah dengan total 1 responden.
+# Dari bar chart tersebut dapat disimpulkan subjek penelitian didominasi oleh responden yang memiliki IPK 3.50 -4.00.
+
+#Grafik 4
+kepuasanIpk<-table(dataValencia$`Apakah Anda merasa puas dengan nilai yang Anda peroleh selama pembelajaran online ini?`)
+kepuasanIpk
+barplot(kepuasanIpk,main="Distribusi Berdasarkan Kepuasan IPK Mahasiswa", col=rainbow(8))
+
+#Kesimpulan Grafik 4
+# Berdasarkan bar chart di atas frekuensi yang paling tinggi adalah “Ya”, sedangkan frekuensi yang paling rendah adalah “Tidak”. 
+# Dari bar chart tersebut dapat disimpulkan bahwa mayoritas responden memiliki kepuasan terhadap IPK yang telah mereka dapatkan.
+
+#Grafik 5
+fasilitas<-table(dataValencia$`Apakah tersedia fasilitas yang mendukung dalam proses pembelajaran Anda dirumah?`)
+fasilitas
+barplot(fasilitas,main="Distribusi Berdasarkan Fasilitas", col=rainbow(8))
+
+#Kesimpulan Grafik 5
+# Berdasarkan bar chart di atas frekuensi yang paling tinggi adalah “4” dengan total 83 responden, dan frekuensi yang paling rendah adalah “1” dengan total 1 responden.
+# Dari bar chart tersebut dapat disimpulkan bahwa responden setuju memiliki fasilitas yang mendukung proses pembelajaran online.
+
+#Grafik 6
+lingkunganKeluarga<-table(dataValencia$`Apakah lingkungan keluarga mendukung dalam proses pembelajaran Anda?`)
+lingkunganKeluarga
+barplot(lingkunganKeluarga,main="Distribusi Berdasarkan Dasar Lingkungan Keluarga ", col=rainbow(8))
+
+#Kesimpulan Grafik 6
+# Berdasarkan bar chart di atas frekuensi yang paling tinggi adalah “4” dengan total 63 responden, dan frekuensi yang paling rendah adalah “1” dengan total 1 responden.
+# Dari bar chart tersebut dapat disimpulkan mayoritas responden setuju bahwa lingkungan keluarga  mendukung dalam proses pembelajaran online.
+
+#Grafik 7
+merasaTerbebani<-table(dataValencia$`Apakah Anda merasa terbebani dalam mengikuti pembelajaran online?`)
+merasaTerbebani
+barplot(merasaTerbebani,main="Mahasiswa Merasa Terbebani Dalam Mengikuti Pembelajaran", col=rainbow(8))
+
+#Kesimpulan Grafik 7
+#Berdasarkan bar chart  di atas frekuensi yang paling tinggi adalah “3” dengan total 61 responden, dan frekuensi yang paling rendah adalah “1” dengan total 6 responden.
+# Dari bar chart tersebut dapatdisimpulkan mayoritas responden merasakan perasaan yang biasa saja dalam mengikuti pembelajaran online.
+
+#Grafik 8
+lingkunganPergaulan<-table(dataValencia$`Apakah lingkungan pergaulan mendukung Anda dalam proses pembelajaran?`)
+lingkunganPergaulan
+barplot(lingkunganPergaulan,main="Distribusi Berdasarkan Lingkungan Pergaulan", col=rainbow(8))
+
+#Kesimpulan Grafik 8
+# Berdasarkan bar chart di atas frekuensi yang paling tinggi adalah “4” dengan total 72 responden, dan frekuensi yang paling rendah adalah “1” dengan total 1 responden.
+# Dari bar chart dapat disimpulkan mayoritas responden setuju bahwa lingkungan pergaulan mereka mendukung mereka selama proses pembelajaran online.
+
+#Grafik 9
+jurusan<-table(dataValencia$`Apakah jurusan yang Anda pilih sesuai dengan minat dan bakat yang Anda miliki?`)
+jurusan
+barplot(jurusan,main="Distribusi Berdasarkan Kesesuaian Jurusan Yang Dipilih Mahasiswa", col=rainbow(8))
+
+#Kesimpulan Grafik 9
+# Berdasarkan bar chart di atas frekuensi yang paling tinggi adalah “4” dengan total 59 responden, dan frekuensi yang paling rendah adalah “1” dengan total 1 responden. 
+#  Dari bar chart dapat disimpulkan mayoritas responden setuju bahwa jurusan yang mereka pilih sesuai dengan minat dan bakat yang mereka miliki.
+
+#Grafik 10
+tekunBelajar<-table(dataValencia$`Pada saat proses pembelajaran, Apakah Anda mengikuti dengan tekun?`)
+tekunBelajar
+barplot(tekunBelajar,main="Distribusi Berdasarkan Ketekunan Mahasiswa", col=rainbow(8))
+
+#Kesimpulan Grafik 10
+# Berdasarkan bar chart di atas frekuensi yang paling tinggi adalah “4”, sedangkan frekuensi yang paling rendah adalah “1”.
+# Dari bar chart dapat disimpulkan mayoritas responden setuju bahwa mereka mengikuti proses pembelajaran dengan tekun.
+
+#Grafik 11
+mencariReferensi<-table(dataValencia$`Apakah sebelum mengikuti pembelajaran Anda mencari referensi tentang pelajaran tersebut?`)
+mencariReferensi
+barplot(mencariReferensi,main="Distribusi Berdasarkan Persiapan Mahasiswa Sebelum Jam Pelajaran", col=rainbow(8))
+
+#Kesimpulan Grafik 11
+# Berdasarkan bar chart di atas frekuensi yang paling tinggi adalah “3” dengan total 60 responden, dan frekuensi yang paling rendah adalah “1” dengan total 1 responden.
+# Dari bar chart dapat disimpulkan bahwa mahasiswa merasa persiapan mereka biasa saja ketika ingin memulai pelajaran.
+
+#Grafik 12
+reviewMateri<-table(dataValencia$`Setelah pembelajaran selesai, Apakah Anda mereview kembali pembelajaran tersebut?`)
+reviewMateri
+barplot(reviewMateri,main="Distribusi Berdasarkan Mahasiswa Mereview Kembali Pelajaran", col=rainbow(8))
+
+#Kesimpulan Grafik 12
+# Berdasarkan bar chart di atas frekuensi yang paling tinggi adalah Berdasarkan data di atas frekuensi paling tinggi adalah “4”, sedangkan frekuensi paling rendah adalah “1”.  
+# Dari bar chart bisa disimpulkan mayoritas responden setuju bahwa mereka melakukan review kembali pelajaran tersebut setelah selesai perkuliahan.
+
+#Grafik 13
+keaktifanMahasiswa<-table(dataValencia$`Apakah Anda terlibat aktif berdiskusi dalam proses pembelajaran?`)
+keaktifanMahasiswa
+barplot(keaktifanMahasiswa,main="Distribusi Berdasarkan Keaktifan Mahasiswa", col=rainbow(8))
+
+#Kesimpulan Grafik 13
+# Berdasarkan bar chart di atas frekuensi yang paling tinggi adalah “3” dengan total 66 responden, dan frekuensi yang paling rendah adalah “1” dengan total 4 responden. 
+# Dari bar chart dapat disimpulkan bahwa mayoritas responden merasa biasa saja dalam hal keaktifan saat mengikuti perkuliahan online.
+
+#Grafik 14
+membuatTugas<-table(dataValencia$`Apakah semua tugas yang diberikan dapat Anda selesaikan tepat pada waktunya?`)
+membuatTugas
+barplot(membuatTugas,main="Distribusi Berdasarkan Ketepatan Waktu Menyelesaikan Tugas", col=rainbow(8))
+
+#Kesimpulan Grafik 14
+# Berdasarkan bar chart di atas frekuensi yang paling tinggi adalah “5” dengan total 89 responden, dan frekuensi yang paling rendah adalah “1” dengan total 0 responden. 
+# Dari bar chart dapat disimpulkan mayoritas responden mengumpulkan tugas tepat pada waktu.
+
+
+```
+
+### (10%) Besaran Statistik
+
+```{r message=FALSE, warning=FALSE}
+#Besaran Statistik----
+
+# Tabulasi Data 1
+table(dataValencia$`Apakah Anda terlibat aktif berdiskusi dalam proses pembelajaran?`,dataValencia$`Berapa range IPK terakhir Anda`)
+
+# Terdapat perbedaan yang signifikan pada range IPK 2.50 - 2.99 dengan range IPK 3.00 - 3.49 pada responden yang memilih jawaban nomor 4. Sedangkan tidak terdapat perbedaan yang signifikan untuk mahasiswa yang memiliki IPK dengan range 3.00 - 3.49 dengan range 3.50 - 4.00 pada responden yang memilih jawaban nomor 2. Tabel kontingensi dua arah ini membantu dalam menjawab hipotesis kami dan menunjukkan apakah ada hubungan antara minat belajar dengan prestasi mahasiswa.
+
+# Tabulasi Data 2
+table(dataValencia$`Apakah Anda merasa puas dengan nilai yang Anda peroleh selama pembelajaran online ini?`, dataValencia$`Apakah Anda terlibat aktif berdiskusi dalam proses pembelajaran?`)
+
+# Terdapat perbedaan yang signifikan pada responden yang memilih nomor 2 dan 3 pada jawaban “Ya”. Responden merasa ada perasaan puas akan nilai yang diperoleh pada pembelajaran online. Sedangkan tidak terdapat perbedaan yang signifikan pada responden yang memilih nomor 2 dan 3 pada jawaban “Tidak”. Tabel kontingensi dua arah ini akan membantu kami dalam menjawab hipotesis kami dan menunjukkan apakah ada hubungan antara perkuliahan online dengan minat belajar mahasiswa.
+
+# Tabulasi Data 3
+table(dataValencia$`Berapa range IPK terakhir Anda`,dataValencia$`Apakah Anda merasa puas dengan nilai yang Anda peroleh selama pembelajaran online ini?`)
+
+# Terdapat perbedaan yang signifikan pada responden yang memiliki range IPK 3.50 – 4.00 pada jawaban “Ya” dan “Tidak”. Sedangkan tidak terdapat perbedaan yang signifikan untuk responden yang memiliki range IPK < 2.50 pada jawaban “Ya” dan “Tidak”. Tabel kontingensi dua arah ini akan membantu kami dalam menjawab hipotesis kami dan menunjukkan adakah hubungan antara prestasi mahasiswa dengan perkuliahan online.
+
+# Tabulasi Data 4
+table(dataValencia$`Pada saat proses pembelajaran, Apakah Anda mengikuti dengan tekun?`,dataValencia$`Berapa range IPK terakhir Anda`)
+
+# Terdapat perbedaan yang signifikan pada responden yang memiliki range IPK 2.50 - 2.99 dan 3.00 - 3.49 pada jawaban nomor 3. Sedangkan tidak terdapat perbedaan yang signifikan bagi responden yang memiliki range 3.00 - 3.49 dengan range 3.50 - 4.00 pada jawaban nomor 2 dan 5. Tabel kontingensi dua arah ini akan membantu kami dalam menjawab hipotesis kami dan menunjukkan adakah hubungan antara lingkungan internal dengan prestasi mahasiswa.
+
+# Tabulasi Data 5
+table(dataValencia$`Apakah lingkungan keluarga mendukung dalam proses pembelajaran Anda?`,dataValencia$`Berapa range IPK terakhir Anda`)
+
+# Terdapat perbedaan yang signifikan pada responden yang memiliki range IPK dengan nilai 2.50 - 2.99 dan 3.00 - 3.49 pada jawaban nomor 5. Sedangkan tidak terdapat perbedaan yang signifikan pada responden yang memiliki IPK 3.00 - 3.49 dengan range 3.50 - 4.00 pada jawaban nomor 3. Tabel kontingensi dua arah ini akan membantu kami dalam menjawab hipotesis kami dan menunjukkan adakah hubungan antara lingkungan eksternal (keluarga) dengan prestasi mahasiswa.
+
+table(dataValencia$`Apakah lingkungan pergaulan mendukung Anda dalam proses pembelajaran?`,dataValencia$`Berapa range IPK terakhir Anda`)
+
+# Terdapat perbedaan yang signifikan pada responden yang memiliki range IPK dengan nilai 2.50 - 2.99 dan 3.00 - 3.49 pada jawaban nomor 5. Sedangkan tidak terdapat perbedaan yang signifikan pada responden yang memiliki IPK 3.00 - 3.49 dengan range 3.50 - 4.00 pada jawaban nomor 3. Tabel kontingensi dua arah ini akan membantu kami dalam menjawab hipotesis kami dan menunjukkan adakah hubungan antara lingkungan eksternal (pergaulan) dengan prestasi mahasiswa.
+
+# Tabulasi Data 6
+table(dataValencia$`Apakah sebelum mengikuti pembelajaran Anda mencari referensi tentang pelajaran tersebut?`,dataValencia$`Berapa range IPK terakhir Anda`)
+
+#Terdapat perbedaan yang signifikan pada responden yang memiliki range IPK dengan nilai 2.50 – 2.99 dan 3.00 – 3.49 pada jawaban nomor 3. Sedangkan tidak terdapat perbedaan yang signifikan untuk responden yang memiliki IPK 3.00 - 3.49 dan 3.50 - 4.00 pada jawaban nomor 5. Tabel kontingensi dua arah ini akan membantu kami dalam menjawab hipotesis kami dan menunjukkan adakah hubungan antara proses belajar online dengan prestasi mahasiswa.
+
+table(dataValencia$`Setelah pembelajaran selesai, Apakah Anda mereview kembali pembelajaran tersebut?`,dataValencia$`Berapa range IPK terakhir Anda`)
+
+# Terdapat perbedaan yang signifikan pada responden yang memiliki range IPK dengan nilai 2.50 – 2.99 dan 3.00 – 3.49 pada jawaban nomor 3. Sedangkan tidak terdapat perbedaan yang signifikan untuk responden yang memiliki IPK 3.00 - 3.49 dan 3.50 - 4.00 pada jawaban nomor 1 dan 5. Tabel kontingensi dua arah ini akan membantu kami dalam menjawab hipotesis kami dan menunjukkan adakah hubungan antara proses belajar online dengan prestasi mahasiswa.
+
+# Tabulasi Data 7
+table(dataValencia$`Apakah tersedia fasilitas yang mendukung dalam proses pembelajaran Anda dirumah?`,dataValencia$`Berapa range IPK terakhir Anda`)
+
+# Terdapat perbedaan yang signifikan pada responden yang memiliki range IPK dengan nilai 2.50 - 2.99 dan 3.00 - 3.49 pada jawaban nomor 4. Sedangkan tidak terdapat perbedaan yang signifikan untuk responden yang memiliki 3.00 - 3.49 dan 3.50 - 4.00 pada jawaban nomor 2. Tabel kontingensi dua arah ini akan membantu kami dalam menjawab hipotesis kami dan menunjukkan adakah hubungan hubungan sarana prasarana dengan prestasi mahasiswa.
+
+
+```
+
+
+
+## (Bobot 50%) Uji Hipotesa 
+
+```{r message=FALSE, warning=FALSE}
+library(ggplot2)
+
+# Keterangan kuesioner
+#1. Sangat Tidak Setuju
+#2. Tidak Setuju
+#3. Biasa Saja
+#4. Setuju
+#5. Sangat Setuju
+
+# Grafik untuk hipotesa 1----------
+hipo1 <- data.frame(table(dataValencia$`Apakah Anda terlibat aktif berdiskusi dalam proses pembelajaran?`,dataValencia$`Berapa range IPK terakhir Anda`))
+names(hipo1) <- c("keaktifanMahasiswa","rangeIPK","Count")
+
+ggplot(data = hipo1, aes(x = keaktifanMahasiswa, y = Count, fill = rangeIPK)) + 
+  geom_bar(stat = "identity", position = "dodge") + 
+  labs( x = "Keaktifan Mahasiswa",
+        y = "Count",
+        fill = "Range IPK",
+        title = "Hubungan antara Minat Belajar dengan Prestasi Mahasiswa"
+  )
+
+# Uji Hipotesa 1------
+chisq.test(dataValencia$`Apakah Anda terlibat aktif berdiskusi dalam proses pembelajaran?`,dataValencia$`Berapa range IPK terakhir Anda`, simulate.p.value = TRUE)
+
+# H0: Tidak terdapat hubungan antara minat belajar dengan prestasi mahasiswa.
+# H1: Terdapat hubungan antara minat belajar dengan prestasi mahasiswa.
+
+#p-value = 0.0009995 < alpha = 0,05
+#H0 ditolak pada alpha 5%.
+#Kesimpulan: terdapat bukti yang cukup untuk menyatakan bahwa terdapat hubungan antara minat belajar dengan prestasi mahasiswa.
+
+# Grafik untuk hipotesa 2----------
+hipo2 <- data.frame(table(dataValencia$`Apakah Anda merasa puas dengan nilai yang Anda peroleh selama pembelajaran online ini?`, dataValencia$`Apakah Anda terlibat aktif berdiskusi dalam proses pembelajaran?`))
+names(hipo2) <- c("kepuasanIpk","keaktifanMahasiswa","Count")
+
+ggplot(data = hipo2, aes(x = kepuasanIpk, y = Count, fill = keaktifanMahasiswa)) +
+  geom_bar(stat="identity", position="dodge") +
+  labs( x = "Kepuasan IPK",
+        y = "Count",
+        fill = "Keaktifan Mahasiswa",
+        title = "Hubungan antara Perkuliahan Online dengan Minat Belajar Mahasiswa"
+  )
+
+# Uji Hipotesa 2--------
+chisq.test(dataValencia$`Apakah Anda merasa puas dengan nilai yang Anda peroleh selama pembelajaran online ini?`,dataValencia$`Apakah Anda terlibat aktif berdiskusi dalam proses pembelajaran?`, simulate.p.value = TRUE)
+
+# H0: Tidak terdapat hubungan antara perkuliahan online dengan minat belajar mahasiswa
+# H1: Terdapat hubungan antara perkuliahan online dengan minat belajar mahasiswa
+
+#p-value = 0.01649 < alpha = 0,05
+#H0 ditolak pada alpha 5%.
+#Kesimpulan: terdapat bukti yang cukup untuk menyatakan bahwa terdapat hubungan antara perkuliahan online dengan minat belajar mahasiswa.
+
+# Grafik untuk hipotesa 3----------
+hipo3 <- data.frame(table(dataValencia$`Berapa range IPK terakhir Anda`,dataValencia$`Apakah Anda merasa puas dengan nilai yang Anda peroleh selama pembelajaran online ini?`))
+names(hipo3) <- c("rangeIPK","kepuasanIpk","Count")
+
+ggplot(data = hipo3, aes(x = rangeIPK, y = Count, fill = kepuasanIpk)) + 
+  geom_bar(stat="identity", position="dodge") +
+  labs( x = "Range IPK",
+        y = "Count",
+        fill = "Kepuasan IPK",
+        title = "Hubungan antara prestasi Belajar Mahasiswa dengan Perkuliahan Online"
+  )
+
+# Uji Hipotesa 3---------
+chisq.test(dataValencia$`Berapa range IPK terakhir Anda`,dataValencia$`Apakah Anda merasa puas dengan nilai yang Anda peroleh selama pembelajaran online ini?`, simulate.p.value = TRUE)
+
+# H0: Tidak terdapat hubungan antara prestasi belajar mahasiswa dengan perkuliahan online.
+# H1: Terdapat hubungan antara prestasi belajar mahasiswa dengan perkuliahan online.
+
+#p-value = 0.0004998 < alpha = 0,05
+#H0 ditolak pada alpha 5%.
+#Kesimpulan:  terdapat bukti yang cukup untuk menyatakan bahwa terdapat hubungan antara prestasi belajar mahasiswa dengan perkuliahan online.
+
+# Grafik untuk hipotesa 4------
+hipo4 <- data.frame(table(dataValencia$`Pada saat proses pembelajaran, Apakah Anda mengikuti dengan tekun?`,dataValencia$`Berapa range IPK terakhir Anda`))
+names(hipo4) <- c("tekunBelajar","rangeIPK","Count")
+
+ggplot(data = hipo4, aes(x = tekunBelajar, y = Count, fill = rangeIPK)) + 
+  geom_bar(stat="identity", position="dodge") +
+  labs( x = "Ketekunan Mengikuti Pembelajaran",
+        y = "Count",
+        fill = "Range IPK",
+        title = "Hubungan antara Lingkungan Internal dengan Prestasi Mahasiswa"
+  )
+
+# Uji Hipotesa 4-------
+chisq.test(dataValencia$`Pada saat proses pembelajaran, Apakah Anda mengikuti dengan tekun?`,dataValencia$`Berapa range IPK terakhir Anda`, simulate.p.value = TRUE)
+
+# H0: Tidak terdapat hubungan antara lingkungan internal dengan prestasi mahasiswa.
+# H1: Terdapat hubungan antara lingkungan internal dengan prestasi mahasiswa.
+
+#p-value = 0.8911 > alpha = 0,05
+#H0 tidak ditolak pada alpha 5%.
+#Kesimpulan: tidak terdapat bukti yang cukup untuk menyatakan bahwa terdapat hubungan antara lingkungan internal dengan prestasi mahasiswa.
+
+# Grafik untuk hipotesa 5--------
+hipo5 <- data.frame(table(dataValencia$`Apakah lingkungan keluarga mendukung dalam proses pembelajaran Anda?`,dataValencia$`Berapa range IPK terakhir Anda`))
+names(hipo5) <- c("lingkunganKeluarga","rangeIPK","Count")
+
+ggplot(data = hipo5, aes(x = lingkunganKeluarga, y = Count, fill = rangeIPK)) + 
+  geom_bar(stat="identity", position="dodge") +
+  labs( x = "Dukungan Lingkungan Keluarga",
+        y = "Count",
+        fill = "Range IPK",
+        title = "Hubungan antara Lingkungan Eksternal dengan Prestasi Mahasiswa"
+  )
+
+hipo5_2 <- data.frame(table(dataValencia$`Apakah lingkungan pergaulan mendukung Anda dalam proses pembelajaran?`,dataValencia$`Berapa range IPK terakhir Anda`)
+)
+names(hipo5_2 ) <- c("lingkunganPergaulan","rangeIPK","Count")
+
+ggplot(data = hipo5_2 , aes(x = lingkunganPergaulan, y = Count, fill = rangeIPK)) + 
+  geom_bar(stat="identity", position="dodge") +
+  labs( x = "Dukungan Lingkungan Pergaulan",
+        y = "Count",
+        fill = "Range IPK",
+        title = "Hubungan antara Lingkungan Eksternal dengan Prestasi Mahasiswa (2)"
+  )
+
+# Uji Hipotesa 5-------
+chisq.test(dataValencia$`Apakah lingkungan pergaulan mendukung Anda dalam proses pembelajaran?`,dataValencia$`Berapa range IPK terakhir Anda`, simulate.p.value = TRUE)
+
+# H0: Tidak terdapat hubungan antara lingkungan eksternal dengan prestasi mahasiswa.
+# H1: Terdapat hubungan antara lingkungan eksternal dengan prestasi mahasiswa.
+
+#p-value = 0.1129 > alpha = 0,05
+#H0 tidak ditolak pada alpha 5%.
+#Kesimpulan: tidak terdapat bukti yang cukup untuk menyatakan bahwa terdapat hubungan antara lingkungan eksternal dengan prestasi mahasiswa.
+
+chisq.test(dataValencia$`Apakah lingkungan keluarga mendukung dalam proses pembelajaran Anda?`,dataValencia$`Berapa range IPK terakhir Anda`, simulate.p.value = TRUE)
+
+# H0: Tidak terdapat hubungan antara lingkungan eksternal dengan prestasi mahasiswa.
+# H1: Terdapat hubungan antara lingkungan eksternal dengan prestasi mahasiswa.
+
+#p-value = 0.1759 > alpha = 0,05
+#H0 tidak ditolak pada alpha 5%.
+#Kesimpulan: tidak terdapat bukti yang cukup untuk menyatakan bahwa terdapat hubungan antara lingkungan eksternal dengan prestasi mahasiswa.
+
+# Grafik untuk hipotesa 6--------
+hipo6 <- data.frame(table(dataValencia$`Apakah sebelum mengikuti pembelajaran Anda mencari referensi tentang pelajaran tersebut?`,dataValencia$`Berapa range IPK terakhir Anda`))
+names(hipo6) <- c("mencariReferensi","rangeIPK","Count")
+ggplot(data = hipo6, aes(x = mencariReferensi, y = Count, fill = rangeIPK)) + 
+  geom_bar(stat="identity", position="dodge") +
+  labs( x = "Mencari referensi sebelum pembelajaran",
+        y = "Count",
+        fill = "Range IPK",
+        title = "Hubungan antara Belajar Online dengan Prestasi Mahasiswa"
+  )
+
+hipo6_2 <- data.frame(table(dataValencia$`Setelah pembelajaran selesai, Apakah Anda mereview kembali pembelajaran tersebut?`,dataValencia$`Berapa range IPK terakhir Anda`))
+names(hipo6_2) <- c("reviewMateri","rangeIPK","Count")
+ggplot(data = hipo6_2, aes(x = reviewMateri, y = Count, fill = rangeIPK)) + 
+  geom_bar(stat="identity", position="dodge") +
+  labs( x = "Review materi setelah pembelajaran",
+        y = "Count",
+        fill = "Range IPK",
+        title = "Hubungan antara proses Belajar Online dengan Prestasi Mahasiswa (2)"
+  )
+
+# Uji Hipotesa 6-------
+chisq.test(dataValencia$`Apakah sebelum mengikuti pembelajaran Anda mencari referensi tentang pelajaran tersebut?`,dataValencia$`Berapa range IPK terakhir Anda`, simulate.p.value = TRUE)
+
+# H0: Tidak terdapat hubungan antara proses belajar online dengan prestasi mahasiswa.
+# H1: Terdapat hubungan antara proses belajar online dengan prestasi mahasiswa.
+
+#p-value = 0.7746 > alpha = 0,05
+#H0 tidak ditolak pada alpha 5%.
+#Kesimpulan: tidak terdapat bukti yang cukup untuk menyatakan bahwa terdapat hubungan antara proses belajar online dengan prestasi mahasiswa.
+
+chisq.test(dataValencia$`Setelah pembelajaran selesai, Apakah Anda mereview kembali pembelajaran tersebut?`,dataValencia$`Berapa range IPK terakhir Anda`, simulate.p.value = TRUE)
+
+# H0: Tidak terdapat hubungan antara proses belajar online dengan prestasi mahasiswa.
+# H1: Terdapat hubungan antara proses belajar online dengan prestasi mahasiswa.
+
+#p-value = 0.7081 > alpha = 0,05
+#H0 tidak ditolak pada alpha 5%.
+#Kesimpulan: tidak terdapat bukti yang cukup untuk menyatakan bahwa terdapat hubungan antara proses belajar online dengan prestasi mahasiswa.
+
+# Grafik untuk hipotesa 7--------
+hipo7 <- data.frame(table(dataValencia$`Apakah tersedia fasilitas yang mendukung dalam proses pembelajaran Anda dirumah?`,dataValencia$`Berapa range IPK terakhir Anda`))
+names(hipo7) <- c("fasilitas","rangeIPK","Count")
+ggplot(data = hipo7, aes(x = fasilitas, y = Count, fill = rangeIPK)) + 
+  geom_bar(stat="identity", position="dodge") + 
+  labs( x = "Fasilitas",
+        y = "Count",
+        fill = "Range IPK",
+        title = "Hubungan antara Sarana Prasarana dengan Prestasi Mahasiswa"
+  )
+
+# Uji Hipotesa 7-------
+chisq.test(dataValencia$`Apakah tersedia fasilitas yang mendukung dalam proses pembelajaran Anda dirumah?`,dataValencia$`Berapa range IPK terakhir Anda`, simulate.p.value = TRUE)
+
+# H0: Tidak terdapat hubungan antara sarana prasarana dengan prestasi mahasiswa.
+# H1: Terdapat hubungan antara sarana prasarana dengan prestasi mahasiswa.
+
+#p-value = 0.2744 > alpha = 0,05
+#H0 tidak ditolak pada alpha 5%.
+#Kesimpulan: tidak terdapat bukti yang cukup untuk menyatakan bahwa terdapat hubungan antara sarana prasarana dengan prestasi mahasiswa.
+
+
+```
+
